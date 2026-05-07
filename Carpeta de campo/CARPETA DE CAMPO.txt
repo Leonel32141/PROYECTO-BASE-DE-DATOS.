@@ -1,9 +1,12 @@
-Fede hizo el DER
+9/4 se realizo el Diagram De Entidad Relación (DER) en lucidcart -- Federico Tamburelli
 
-Mateo hizo la base de datos
+20/4 Realizacion de la base de datos en PHPMyAdmin y la subio al github del grupo -- Mateo Scatolon
 
-mateo hizo los procedures dictados por el profe en su casa
+21/4 Pequeños percances entre el DER y la base de datos, resueltos en el momento -- Grupo en General
 
-Leo hizo el maunual de uso
+23/4 Realización de los StoreProcedures dictados (redactar las funciones de los StoresProcedures) por el profe en su casa y subio la actualizacion de la base de datos al github del grupo -- Mateo Scatolon
 
-clase 7/5 profe explico las transacciones y las implemenStamos en la base de datos con procedures incluidos 
+30/4 Realizacion del manual de uso y lo subio al github del grupo -- Leonel Tello
+
+7/5 profe explico que son las transacciones y las implementamos en la base de datos con StoresProcedures 
+
