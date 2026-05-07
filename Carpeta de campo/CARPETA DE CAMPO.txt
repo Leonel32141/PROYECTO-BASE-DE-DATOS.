@@ -1,0 +1,9 @@
+Fede hizo el DER
+
+Mateo hizo la base de datos
+
+mateo hizo los procedures dictados por el profe en su casa
+
+Leo hizo el maunual de uso
+
+clase 7/5 profe explico las transacciones y las implemenStamos en la base de datos con procedures incluidos 
