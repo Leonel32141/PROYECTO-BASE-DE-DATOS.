@@ -8,5 +8,5 @@
 
 30/4 Realizacion del manual de uso y lo subio al github del grupo -- Leonel Tello
 
-7/5 profe explico que son las transacciones y las implementamos en la base de datos con StoresProcedures 
+7/5 profe explico que son las transacciones y las implementamos en la base de datos con StoresProcedures (explicar las funciones de los Storeprocedures y en q implementamos las transacciones)
 
