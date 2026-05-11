@@ -13,7 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($nombre === '' || $apellido === '' || $email === '' || $password_raw === '') {
         $error = 'Todos los campos son obligatorios.';
     } else {
-        $pass_hash = password_hash($password_raw, PASSWORD_DEFAULT);
+        // Guardar contraseña sin hash
+        $pass_hash = $password_raw;
 
         $stmt = $conexion->prepare("INSERT INTO usuarios (nombre_usuario, apellido, email, contraseña) VALUES (?, ?, ?, ?)");
         if ($stmt) {
