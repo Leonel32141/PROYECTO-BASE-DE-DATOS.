@@ -1,0 +1,4 @@
+cambiar el boton de volver 
+hacer la pagina responsive
+mover login y register a pagina aparte
+agregar imagenes
