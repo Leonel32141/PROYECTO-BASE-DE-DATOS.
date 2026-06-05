@@ -34,6 +34,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $error = "Usuario no encontrado.";
             }
+            /*
+            //contra deshasheada
+            if ($password === $usuario['pass']) {
+        $_SESSION['id_usuario'] = $usuario['id'];
+        $_SESSION['usuario'] = $usuario['nombre_usuario'];
+        header('Location: ../index.php');
+        exit;
+    } else {
+        $error = "Contraseña incorrecta.";
+    }
+} else {
+    $error = "Usuario no encontrado.";
+}
+    */
+
             $stmt->close();
         } else {
             $error = "Error en la consulta: " . $conexion->error;

@@ -354,3 +354,87 @@ table a:hover {
     color: #999;
     padding: 20px;
 }
+
+/* ==========================================================================
+   ESTILOS RESPONSIVE PARA TU PROYECTO TIKI-TAKA
+   Se activan automáticamente en pantallas menores a 768px (Celulares)
+   ========================================================================== */
+@media (max-width: 768px) {
+    
+    /* 1. Ajustamos el contenedor principal para que no quede muy apretado */
+    .container {
+        width: 100% !important;
+        padding: 10px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        font-size: 24px; /* Achicamos un toque el título principal */
+        text-align: center;
+    }
+
+    /* 2. SOLUCIÓN MÁGICA PARA LAS TABLAS DE POSICIONES Y RESULTADOS
+       Hacemos que la tabla tenga un scroll horizontal propio si los datos no entran,
+       evitando que se rompa todo el diseño de la página. */
+    .section {
+        overflow-x: auto; /* Permite scroll horizontal solo dentro de la sección */
+        padding-bottom: 10px;
+    }
+
+    table {
+        width: 100%;
+        display: block; /* Cambiamos el comportamiento para controlar el desborde */
+        overflow-x: auto;
+        white-space: nowrap; /* Evita que los nombres de los clubes se corten en dos renglones */
+        font-size: 13px; /* Achicamos la letra de los datos de la liga, goles, etc. */
+    }
+
+    th, td {
+        padding: 8px 6px; /* Achicamos el espacio interno de las celdas */
+    }
+
+    /* 3. Ajustamos las tarjetas de Jugador Estrella (MVP) */
+    .mvp-card {
+        padding: 15px;
+    }
+
+    .mvp-info {
+        display: flex;
+        flex-direction: column; /* En vez de horizontal, ponemos los datos en fila vertical */
+        gap: 10px;
+        text-align: center;
+    }
+
+    .mvp-info div {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+    }
+
+    /* 4. Ajustamos los selectores y botones de Competiciones y Clubes */
+    .selector-container {
+        display: flex;
+        flex-direction: column; /* El select arriba y el botón abajo */
+        width: 100%;
+        gap: 10px;
+    }
+
+    .selector-container select, 
+    .selector-container button {
+        width: 100%; /* Ocupan todo el ancho disponible en la pantalla del celu */
+        box-sizing: border-box;
+    }
+
+    /* 5. Botones de Iniciar Sesión y Registrarse al final */
+    .auth-buttons {
+        display: flex;
+        flex-direction: column; /* Uno abajo del otro para que sea más fácil apretar con el dedo */
+        gap: 10px;
+        width: 100%;
+    }
+
+    .btn, .btn-secondary {
+        display: block;
+        text-align: center;
+        width: 100%;
+    }
+}
