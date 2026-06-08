@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1:3307
--- Tiempo de generación: 08-06-2026 a las 00:39:27
+-- Servidor: 127.0.0.1:3306
+-- Tiempo de generación: 08-06-2026 a las 19:30:29
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,14 +20,11 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `proyectofutbol`
 --
-CREATE DATABASE IF NOT EXISTS `proyectofutbol` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `proyectofutbol`;
 
 DELIMITER $$
 --
 -- Procedimientos
 --
-DROP PROCEDURE IF EXISTS `jugador_estrella_de_un_club`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `jugador_estrella_de_un_club` (IN `club_id` INT)   BEGIN
     SELECT  nombre_club as club, nombre, apellido, goles, asistencias, (goles + asistencias) AS rendimiento_total
     FROM  jugadores j
@@ -38,7 +35,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `jugador_estrella_de_un_club` (IN `c
     LIMIT 1;
  END$$
 
-DROP PROCEDURE IF EXISTS `mostrar_historial`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `mostrar_historial` ()   BEGIN
     SELECT
         p.fecha_hora AS 'Fecha',
@@ -54,7 +50,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `mostrar_historial` ()   BEGIN
     ORDER BY p.fecha_hora DESC;
 END$$
 
-DROP PROCEDURE IF EXISTS `mostrar_ranking_clubes`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `mostrar_ranking_clubes` ()   BEGIN
     SELECT 
         c.nombre_club AS Club,
@@ -71,7 +66,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `mostrar_ranking_clubes` ()   BEGIN
     ORDER BY Puntos DESC, r.diff_gol DESC, r.goles_a_favor DESC;
 END$$
 
-DROP PROCEDURE IF EXISTS `obtener_informacion_jugadores`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_informacion_jugadores` ()   BEGIN
    
 SELECT nombre, apellido,nombre_club,posicion FROM jugadores
@@ -81,7 +75,6 @@ INNER JOIN clubes
 ON clubes.id_club = jugadores.id_club;
 END$$
 
-DROP PROCEDURE IF EXISTS `obtener_resultados_por_club`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_resultados_por_club` (IN `club_id` INT)   BEGIN
     SELECT p.fecha_hora AS Fecha,p.instancia_partido AS Instancia,c1.nombre_club AS Local,p.Gol_local AS 'GL',p.Gol_visitante AS 'GV',c2.nombre_club AS Visitante, p.estadio AS Estadio
     FROM partidos p
@@ -91,7 +84,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_resultados_por_club` (IN `c
     ORDER BY p.fecha_hora DESC;
 END$$
 
-DROP PROCEDURE IF EXISTS `obtener_resultados_por_competicion`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_resultados_por_competicion` (IN `p_id_competicion` INT)   BEGIN
     SELECT 
         p.fecha_hora AS 'Fecha',
@@ -110,7 +102,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_resultados_por_competicion`
     ORDER BY p.fecha_hora DESC;
 END$$
 
-DROP PROCEDURE IF EXISTS `realizar_intercambio_jugadores`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_usuario_por_email` (IN `email_usuario` VARCHAR(50))   BEGIN
+    select * from usuarios
+    where email = email_usuario;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `realizar_intercambio_jugadores` (IN `p_id_jugador1` INT, IN `p_id_jugador2` INT, IN `p_id_nuevo_club_jugador1` INT, IN `p_id_nuevo_club_jugador2` INT)   BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION 
     BEGIN
@@ -130,7 +126,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `realizar_intercambio_jugadores` (IN
     COMMIT;
 END$$
 
-DROP PROCEDURE IF EXISTS `registrar_partido_y_resultado`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `registrar_partido_y_resultado` (IN `p_id_L` INT, IN `p_id_V` INT, IN `p_golesL` INT, IN `p_golesV` INT, IN `p_id_comp` INT, IN `p_instancia` VARCHAR(50), IN `p_estadio` VARCHAR(100))   BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION 
     BEGIN
@@ -181,7 +176,6 @@ DELIMITER ;
 -- Estructura de tabla para la tabla `clubes`
 --
 
-DROP TABLE IF EXISTS `clubes`;
 CREATE TABLE `clubes` (
   `id_club` int(11) UNSIGNED NOT NULL,
   `nombre_club` varchar(40) NOT NULL,
@@ -222,7 +216,6 @@ INSERT INTO `clubes` (`id_club`, `nombre_club`, `pais`, `locacion`, `estadio`) V
 -- Estructura de tabla para la tabla `competiciones`
 --
 
-DROP TABLE IF EXISTS `competiciones`;
 CREATE TABLE `competiciones` (
   `id_competicion` int(10) UNSIGNED NOT NULL,
   `nombre_competicion` varchar(30) NOT NULL,
@@ -244,7 +237,6 @@ INSERT INTO `competiciones` (`id_competicion`, `nombre_competicion`, `formato`, 
 -- Estructura de tabla para la tabla `jugadores`
 --
 
-DROP TABLE IF EXISTS `jugadores`;
 CREATE TABLE `jugadores` (
   `id_jugador` int(11) UNSIGNED NOT NULL,
   `id_club` int(11) UNSIGNED NOT NULL,
@@ -264,17 +256,17 @@ CREATE TABLE `jugadores` (
 INSERT INTO `jugadores` (`id_jugador`, `id_club`, `nombre`, `apellido`, `edad`, `pais`, `dorsal`, `goles`, `asistencias`) VALUES
 (1, 1, 'Franco', 'Armani', 39, 'Argentina', 1, 0, 0),
 (2, 1, 'Gonzalo', 'Montiel', 29, 'Argentina', 29, 7, 4),
-(3, 1, 'Aníbal', 'Moreno', 26, 'Argentina', 6, 2, 3),
+(3, 3, 'Aníbal', 'Moreno', 26, 'Argentina', 6, 2, 3),
 (4, 1, 'Juan Fernando', 'Quintero', 33, 'Colombia', 10, 13, 10),
 (5, 1, 'Sebastián', 'Driussi', 30, 'Argentina', 9, 17, 4),
 (6, 2, 'Agustín', 'Marchesín', 38, 'Argentina', 1, 0, 0),
 (7, 2, 'Leandro', 'Paredes', 31, 'Argentina', 5, 7, 7),
-(8, 2, 'Santiago', 'Ascacíbar', 29, 'Argentina', 25, 4, 2),
+(8, 3, 'Santiago', 'Ascacíbar', 29, 'Argentina', 25, 4, 2),
 (9, 2, 'Tomas', 'Aranda', 18, 'Argentina', 36, 10, 9),
 (10, 2, 'Adam', 'Bareiro', 29, 'Paraguay', 28, 15, 1),
 (11, 3, 'Rodrigo', 'Rey', 35, 'Argentina', 33, 0, 0),
-(12, 3, 'Kevin', 'Lomónaco', 24, 'Argentina', 26, 0, 1),
-(13, 3, 'Matías', 'Abaldo', 22, 'Uruguay', 19, 0, 8),
+(12, 2, 'Kevin', 'Lomónaco', 24, 'Argentina', 26, 0, 1),
+(13, 1, 'Matías', 'Abaldo', 22, 'Uruguay', 19, 0, 8),
 (14, 3, 'Santiago', 'Montiel', 23, 'Argentina', 7, 3, 5),
 (15, 3, 'Gabriel', 'Ávalos', 35, 'Paraguay', 9, 14, 2),
 (16, 4, 'Facundo', 'Cambeses', 29, 'Argentina', 25, 0, 0),
@@ -366,7 +358,6 @@ INSERT INTO `jugadores` (`id_jugador`, `id_club`, `nombre`, `apellido`, `edad`, 
 --
 -- Disparadores `jugadores`
 --
-DROP TRIGGER IF EXISTS `validar_limites_transferencia`;
 DELIMITER $$
 CREATE TRIGGER `validar_limites_transferencia` BEFORE UPDATE ON `jugadores` FOR EACH ROW BEGIN
     DECLARE cantidad_nueva INT;
@@ -400,7 +391,6 @@ DELIMITER ;
 -- Estructura de tabla para la tabla `mejores_jugadores_del_torneo`
 --
 
-DROP TABLE IF EXISTS `mejores_jugadores_del_torneo`;
 CREATE TABLE `mejores_jugadores_del_torneo` (
   `nombre` varchar(20) NOT NULL,
   `apellido` varchar(20) NOT NULL,
@@ -414,7 +404,6 @@ CREATE TABLE `mejores_jugadores_del_torneo` (
 -- Estructura de tabla para la tabla `partidos`
 --
 
-DROP TABLE IF EXISTS `partidos`;
 CREATE TABLE `partidos` (
   `id_partido` int(10) UNSIGNED NOT NULL,
   `id_competicion` int(10) UNSIGNED NOT NULL,
@@ -531,7 +520,10 @@ INSERT INTO `partidos` (`id_partido`, `id_competicion`, `instancia_partido`, `id
 (97, 2, '32avos', 19, 9, 'R. Etcheverri', '2026-05-05 20:00:00', 1, 3),
 (98, 2, '32avos', 20, 10, 'Don Leon Kolbowski', '2026-05-05 22:15:00', 0, 1),
 (99, 1, 'Fecha 17', 1, 2, 'Monumental', '2026-05-09 17:24:03', 1, 3),
-(101, 1, 'Fecha 18', 20, 19, 'Don Leon Kolbowski', '2026-06-07 19:37:48', 1, 20);
+(101, 1, 'Fecha 18', 20, 19, 'Don Leon Kolbowski', '2026-06-07 19:37:48', 1, 20),
+(102, 1, 'Fecha 19', 11, 2, 'Estadio Florencio So', '2026-06-08 13:39:25', 2, 6),
+(103, 1, 'fase de grupos', 18, 13, 'Club Atlético Chacar', '2026-06-08 13:41:53', 2, 3),
+(104, 1, 'fecha 22', 2, 1, 'Estadio Alberto J.Ar', '2026-06-08 13:45:08', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -539,7 +531,6 @@ INSERT INTO `partidos` (`id_partido`, `id_competicion`, `instancia_partido`, `id
 -- Estructura de tabla para la tabla `posiciones`
 --
 
-DROP TABLE IF EXISTS `posiciones`;
 CREATE TABLE `posiciones` (
   `id_posicion` int(10) UNSIGNED NOT NULL,
   `id_jugador` int(10) UNSIGNED NOT NULL,
@@ -658,7 +649,6 @@ INSERT INTO `posiciones` (`id_posicion`, `id_jugador`, `posicion`) VALUES
 -- Estructura de tabla para la tabla `rankings`
 --
 
-DROP TABLE IF EXISTS `rankings`;
 CREATE TABLE `rankings` (
   `id_ranking` int(10) UNSIGNED NOT NULL,
   `id_club` int(10) UNSIGNED NOT NULL,
@@ -676,8 +666,8 @@ CREATE TABLE `rankings` (
 --
 
 INSERT INTO `rankings` (`id_ranking`, `id_club`, `posicion_ranking`, `goles_a_favor`, `goles_encontra`, `diff_gol`, `partidos_ganados`, `partidos_empatados`, `partidos_perdidos`) VALUES
-(1, 1, 1, 43, 16, 29, 16, 3, 1),
-(2, 2, 2, 37, 22, 13, 13, 5, 2),
+(1, 1, 1, 43, 17, 28, 16, 3, 2),
+(2, 2, 2, 40, 28, 10, 14, 5, 3),
 (3, 5, 3, 18, 11, 7, 9, 6, 2),
 (4, 4, 4, 22, 22, 0, 8, 3, 9),
 (5, 7, 5, 19, 17, 2, 5, 10, 1),
@@ -686,14 +676,14 @@ INSERT INTO `rankings` (`id_ranking`, `id_club`, `posicion_ranking`, `goles_a_fa
 (8, 6, 8, 14, 19, -5, 4, 2, 9),
 (9, 9, 9, 13, 20, -7, 3, 5, 8),
 (10, 8, 10, 12, 19, -7, 2, 7, 7),
-(11, 18, 11, 3, 2, 1, 1, 1, 0),
+(11, 18, 11, 6, 4, 2, 2, 1, 0),
 (12, 19, 12, 2, 23, -21, 0, 0, 2),
 (13, 20, 13, 20, 5, 15, 1, 0, 1),
 (14, 17, 14, 0, 2, -2, 0, 0, 1),
 (15, 15, 15, 0, 1, -1, 0, 0, 1),
-(16, 11, 16, 0, 2, -2, 0, 0, 1),
+(16, 11, 16, 6, 4, 2, 1, 0, 1),
 (17, 12, 17, 1, 3, -2, 0, 0, 1),
-(18, 13, 18, 0, 1, -1, 0, 0, 1),
+(18, 13, 18, 2, 4, -2, 0, 0, 2),
 (19, 14, 19, 1, 2, -1, 0, 0, 1),
 (20, 16, 20, 0, 2, -2, 0, 0, 1);
 
@@ -703,7 +693,6 @@ INSERT INTO `rankings` (`id_ranking`, `id_club`, `posicion_ranking`, `goles_a_fa
 -- Estructura de tabla para la tabla `usuarios`
 --
 
-DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
   `nombre_usuario` varchar(20) NOT NULL,
@@ -719,7 +708,8 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `nombre_usuario`, `apellido`, `pass`, `email`, `fecha_registro`) VALUES
 (4, 'santiago', 'monte', '$2y$10$RYpAufmOOyVcL/Dhh0cOBu3GrbP2IasM3IeE7yF/IcP7rjUKo0V5C', 'm@gmail.com', '2026-06-04 14:31:47'),
-(5, 'ian', 'pechos', '123', 'ian@mail.com', '2026-06-04 14:34:15');
+(5, 'ian', 'pechos', '123', 'ian@mail.com', '2026-06-04 14:34:15'),
+(6, 'GOKU', 'GOKU', '$2y$10$1iwHvxs3Arb6frF5UVziR.jn672Uu5zywidjgMfk7snxF.lLTFJuO', 'g@f.com', '2026-06-08 14:14:38');
 
 --
 -- Índices para tablas volcadas
@@ -799,7 +789,7 @@ ALTER TABLE `jugadores`
 -- AUTO_INCREMENT de la tabla `partidos`
 --
 ALTER TABLE `partidos`
-  MODIFY `id_partido` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `id_partido` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- AUTO_INCREMENT de la tabla `posiciones`
@@ -817,7 +807,7 @@ ALTER TABLE `rankings`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restricciones para tablas volcadas
